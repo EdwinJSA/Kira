@@ -1,4 +1,4 @@
-# 🌺 Proyecto Kira
+# 🇳🇮 Proyecto Kira
 
 **Proyecto Kira** es una aplicación web dedicada a la **cultura nicaragüense**, cuyo propósito es rescatar y difundir las costumbres y tradiciones que nos representan.  
 
@@ -74,18 +74,20 @@ Antes de comenzar, asegúrate de tener instalado:
     **La aplicacion correra en 👉 http://localhost:3000**
 
 ## 📂 Estructura del proyecto
-proyecto-kira/
-│
-├── public/            # Archivos estáticos (HTML, CSS, imágenes)
-├── src/
-│   ├── routes/        # Definición de rutas Express
-│   ├── controllers/   # Lógica de negocio
-│   ├── models/        # Modelos y conexión con PostgreSQL
-│   └── app.js         # Configuración principal de Express
-│
-├── package.json
-├── .env               # Variables de entorno
-└── README.md
+```bash 
+    proyecto-kira/ 
+    │ 
+    ├── public/
+    ├── src/ 
+    │ ├── routes/
+    │ ├── controllers/
+    │ ├── models/
+    │ └── app.js
+    │ 
+    ├── package.json
+    ├── .env 
+    └── README.md
+```
 
 
 
