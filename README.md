@@ -18,19 +18,19 @@ Además, incluirá un sistema de **aula digital** que permitirá a los profesore
 ---
 
 ## 🛠️ Tecnologías utilizadas
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
 
-- **Frontend**:  
-  <i class="devicon-html5-plain colored" style="font-size:40px;"></i> HTML  
-  <i class="devicon-tailwindcss-original colored" style="font-size:40px;"></i> Tailwind  
-  <i class="devicon-javascript-plain colored" style="font-size:40px;"></i> JavaScript  
+- **Frontend**  
+  ![HTML](https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg)  
+  ![Tailwind](https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-plain.svg)  
+  ![JavaScript](https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg)  
 
-- **Backend**:  
-  <i class="devicon-nodejs-plain colored" style="font-size:40px;"></i> Node.js  
-  <i class="devicon-express-original" style="font-size:40px;"></i> Express.js  
+- **Backend**  
+  ![Node.js](https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg)  
+  ![Express](https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg)  
 
-- **Base de datos**:  
-  <i class="devicon-postgresql-plain colored" style="font-size:40px;"></i> PostgreSQL  
+- **Base de datos**  
+  ![PostgreSQL](https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg)  
+
 
 
 ---
