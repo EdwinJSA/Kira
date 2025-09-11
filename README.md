@@ -18,18 +18,19 @@ Además, incluirá un sistema de **aula digital** que permitirá a los profesore
 ---
 
 ## 🛠️ Tecnologías utilizadas
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
 
 - **Frontend**:  
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML" width="40" height="40"/>  
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-plain.svg" alt="TailwindCSS" width="40" height="40"/>  
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" width="40" height="40"/>  
+  <i class="devicon-html5-plain colored" style="font-size:40px;"></i> HTML  
+  <i class="devicon-tailwindcss-original colored" style="font-size:40px;"></i> Tailwind  
+  <i class="devicon-javascript-plain colored" style="font-size:40px;"></i> JavaScript  
 
 - **Backend**:  
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js" width="40" height="40"/>  
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" alt="Express.js" width="40" height="40"/>  
+  <i class="devicon-nodejs-plain colored" style="font-size:40px;"></i> Node.js  
+  <i class="devicon-express-original" style="font-size:40px;"></i> Express.js  
 
 - **Base de datos**:  
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL" width="40" height="40"/>  
+  <i class="devicon-postgresql-plain colored" style="font-size:40px;"></i> PostgreSQL  
 
 
 ---
