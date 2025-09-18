@@ -14,6 +14,12 @@ const __dirname = path.dirname(__filename);
 
 // Inicializar Express y Multer
 const app = express();
+
+app.use(cors({
+  origin: 'https://kira-pink-theta.vercel.app/', // cambia esto por tu dominio real
+  credentials: true // si vas a enviar cookies o headers de auth
+}));
+
 app.use(express.json());
 const upload = multer({ storage: multer.memoryStorage() });
 
