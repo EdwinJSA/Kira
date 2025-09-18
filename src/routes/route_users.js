@@ -6,5 +6,6 @@ const router = Router();
 
 // Ruta de registro de usuario
 router.post("/register", module.registrarUsuario);
+router.post("/login", module.loginUsuario);
 
 export default router;

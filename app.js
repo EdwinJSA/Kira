@@ -2,7 +2,14 @@ import express from "express";
 import multer from "multer";
 import { uploadFile } from "./src/controllers/r2_upload.js";
 import routesUsers from "./src/routes/route_users.js";
-import * as middleware from "./src/middlewares/middleware.js";
+import * as middleware from "./src/middleware/auth.js";
+
+// configura el path
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 
 // Inicializar Express y Multer
@@ -18,6 +25,12 @@ app.post("/upload", upload.single("file"), uploadFile);
 
 // Rutas de la API
 app.use("/users", routesUsers);
+
+// Servir index.html desde src/templates
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "src", "templates", "index.html"));
+});
+
 
 // Iniciar servidor
 app.listen(3000, () => {

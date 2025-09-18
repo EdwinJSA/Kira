@@ -16,4 +16,20 @@ const registrarUsuario = async (req, res) => {
 };
 
 
-export {registrarUsuario};
+const loginUsuario = async (req, res) => {
+  const { correo, contrasena } = req.body;
+  try {
+    const query = `
+      SELECT * FROM usuarios WHERE correo = $1 AND contrasena = $2`;
+    const values = [correo, contrasena];
+    const result = await pool.query(query, values);
+    res.json({ success: true, userId: result.rows[0]?.id || null });
+  } catch (error) {
+    console.error("❌ Error al iniciar sesión:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+
+export {registrarUsuario, loginUsuario};

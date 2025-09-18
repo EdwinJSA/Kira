@@ -1,3 +1,5 @@
 function validarUsuario(req, res, next) {
-    pass
+    next();
 }
+
+export { validarUsuario };
