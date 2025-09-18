@@ -3,6 +3,7 @@ import multer from "multer";
 import { uploadFile } from "./src/controllers/r2_upload.js";
 import routesUsers from "./src/routes/route_users.js";
 import * as middleware from "./src/middleware/auth.js";
+import cors from "cors";
 
 // configura el path
 import path from "path";
@@ -16,7 +17,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
 app.use(cors({
-  origin: 'https://kira-pink-theta.vercel.app/', // cambia esto por tu dominio real
+  origin: 'https://kira-pink-theta.vercel.app', // cambia esto por tu dominio real
   credentials: true // si vas a enviar cookies o headers de auth
 }));
 
