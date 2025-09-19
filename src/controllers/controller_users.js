@@ -5,7 +5,7 @@ const registrarUsuario = async (req, res) => {
     try {
     const query = `
       INSERT INTO usuarios (nombre, contrasena, correo, celular, ciudad)
-      VALUES ($1, $2, $3, $4, $5) RETURNING *`;
+      VALUES ($1, $2, $3, $4, $5) RETURNING nombre, id`;
     const values = [nombre, contrasena, correo, celular, ciudad];
     const result = await pool.query(query, values);
     res.json(result.rows[0]);
