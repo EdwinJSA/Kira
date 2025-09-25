@@ -137,4 +137,23 @@ function crearBaseDatos() {
     });
 }
 
-crearBaseDatos();
+// crearBaseDatos();
+
+function cambiosDataBase() {
+    pool.query(`
+        ALTER TABLE "usuarios"
+        ADD CONSTRAINT correo_unico UNIQUE("correo");
+    `)
+    .then(() => {
+        console.log('Cambios en la base de datos aplicados');
+        process.exit(0);
+    })
+    .catch((error) => {
+        console.error('Error al aplicar cambios en la base de datos:', error);
+        process.exit(1);
+    });
+}
+
+
+
+cambiosDataBase();
