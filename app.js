@@ -18,7 +18,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
 app.use(cors({
-  origin: 'https://kira-pink-theta.vercel.app', // cambia esto por tu dominio real
+  origin: 'https://kira-pink-theta.vercel.app',
   credentials: true // si vas a enviar cookies o headers de auth
 }));
 
