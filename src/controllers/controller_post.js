@@ -90,5 +90,22 @@ const agregarReaccion = async (req, res) => {
 }
 
 
+const agregarComentario = async (req, res) => {
+    const { idPost, idUsuario, texto } = req.body;
+    try {
+        const query = `
+            INSERT INTO comentarios ("idPost", "idUsuario", texto, "fecha_creacion")
+            VALUES ($1, $2, $3, NOW()) RETURNING *`;
+        const values = [idPost, idUsuario, texto];
+        const result = await pool.query(query, values);
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.error("❌ Error al agregar comentario:", error);
+        res.status(500).json({ error: error.message });
+    }
+}
 
-export { crearPost, obtenerTodosPosts, obtenerPostsPorUsuario, agregarReaccion };
+
+
+
+export { crearPost, obtenerTodosPosts, obtenerPostsPorUsuario, agregarReaccion, agregarComentario };
