@@ -1,26 +1,40 @@
 import pool from "../../database/supabase.js";
-import { uploadFile } from "./r2_upload.js";
+import * as module from "./r2_upload.js";
 
 
 // crear un nuevo post
+// crear un nuevo post
 const crearPost = async (req, res) => {
-    const { descripcion, categoria, idUsuario } = req.body;
+  const { descripcion, categoria, idUsuario } = req.body;
 
-    try {
-        const linkArchivo = await uploadFile(req.file);
+  try {
+    let linkArchivo;
 
-        const query = `
-            INSERT INTO post ("idUsuario", descripcion, link_archivo, tipo, fecha_creación)
-            VALUES ($1, $2, $3, $4, NOW()) RETURNING *`;
-        const values = [idUsuario, descripcion, linkArchivo, categoria];
-        const result = await pool.query(query, values);
-
-        res.status(201).json(result.rows[0]);
-    } catch (error) {
-        console.error("❌ Error al crear post:", error);
-        res.status(500).json({ error: error.message });
+    // Detectar tipo de archivo
+    if (req.file.mimetype.startsWith("image/")) {
+      // 👇 si es imagen
+      linkArchivo = await module.uploadFile(req.file);
+    } else if (req.file.mimetype.startsWith("video/")) {
+      // 👇 si es video
+      linkArchivo = await module.uploadVideo(req.file);
+    } else {
+      return res.status(400).json({ error: "Formato de archivo no soportado" });
     }
+
+    const query = `
+      INSERT INTO post ("idUsuario", descripcion, link_archivo, tipo, fecha_creación)
+      VALUES ($1, $2, $3, $4, NOW()) RETURNING *`;
+
+    const values = [idUsuario, descripcion, linkArchivo, categoria];
+    const result = await pool.query(query, values);
+
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    console.error("❌ Error al crear post:", error);
+    res.status(500).json({ error: error.message });
+  }
 };
+
 
 
 
