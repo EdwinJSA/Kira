@@ -57,16 +57,25 @@ const obtenerPuntajeUsuario = async (req, res) => {
 };
 
 
-const puntajeTodos = async () => {
+const puntajeTodos = async (req, res) => {
   try {
-    const query = `SELECT nombre, puntaje FROM usuarios`;
+    const query = `
+      SELECT 
+        id, 
+        nombre, 
+        puntaje,
+        ROW_NUMBER() OVER (ORDER BY puntaje DESC) AS posicion
+      FROM usuarios
+      ORDER BY puntaje DESC
+    `;
     const result = await pool.query(query);
-    return result.rows;
+    res.json(result.rows);
   } catch (error) {
-    console.error("❌ Error al obtener puntajes de usuarios:", error);
-    throw new Error(error.message);
+    console.error("❌ Error al obtener puntajes de todos los usuarios:", error);
+    res.status(500).json({ error: error.message });
   }
-}
+};
+
 
 
 export { registrarUsuario, loginUsuario, obtenerPuntajeUsuario, puntajeTodos };
