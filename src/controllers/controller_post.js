@@ -78,7 +78,7 @@ const agregarReaccion = async (req, res) => {
     const { idPost, idUsuario } = req.body;
     try {
         const query = `
-            INSERT INTO reacciones (idPost, idUsuario, fecha)
+            INSERT INTO "reacciones" ("idPost", "idUsuario", "fecha")
             VALUES ($1, $2, NOW()) RETURNING *`;
         const values = [idPost, idUsuario];
         const result = await pool.query(query, values);
