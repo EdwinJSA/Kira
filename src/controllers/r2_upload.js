@@ -16,13 +16,11 @@ export const optimizeImage = async (buffer) => {
   }
 };
 
-export const uploadFile = async (req, res) => {
+export const uploadFile = async (file) => {
   try {
-    // Llamamos a la función para optimizar
-    const optimizedImage = await optimizeImage(req.file.buffer);
+    const optimizedImage = await optimizeImage(file.buffer);
 
-    // Convertir el nombre a .webp
-    const fileName = req.file.originalname.replace(/\.[^/.]+$/, ".webp");
+    const fileName = file.originalname.replace(/\.[^/.]+$/, ".webp");
 
     const params = {
       Bucket: process.env.R2_BUCKET,
@@ -35,12 +33,32 @@ export const uploadFile = async (req, res) => {
     const publicBaseUrl = process.env.R2_PUBLIC_URL; 
     const publicUrl = `${publicBaseUrl}/${fileName}`;
 
-    res.json({ 
-      message: "Archivo subido!", 
-      url: publicUrl,          // 👈 URL pública
-    });
+    return publicUrl; // 👈 devolvemos la URL
   } catch (error) {
     console.error("❌ Error al subir archivo:", error);
-    res.status(500).json({ error: error.message });
+    throw new Error("Error al subir archivo");
+  }
+};
+
+
+export const uploadVideo = async (file) => {
+  try {
+    const fileName = file.originalname;
+
+    const params = {
+      Bucket: process.env.R2_BUCKET,
+      Key: fileName,
+      Body: file.buffer,
+      ContentType: file.mimetype,
+    };
+
+    const result = await s3.upload(params).promise();
+    const publicBaseUrl = process.env.R2_PUBLIC_URL;
+    const publicUrl = `${publicBaseUrl}/${fileName}`;
+
+    return publicUrl;
+  } catch (error) {
+    console.error("❌ Error al subir video:", error);
+    throw new Error("Error al subir video");
   }
 };

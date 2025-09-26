@@ -13,6 +13,39 @@
     </form> -->
 
     HOLAS BIENVENIDO A MI PROYECTO
-    <video src="https://pub-dc88437b1eb54374b54af12eb03423a9.r2.dev/v12044gd0000d2kfrrnog65tjd7k6pi0.mp4" controls></video>
+    <!-- <video src="https://pub-dc88437b1eb54374b54af12eb03423a9.r2.dev/v12044gd0000d2kfrrnog65tjd7k6pi0.mp4" controls></video> -->
+
+    <!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Probar Crear Post</title>
+</head>
+<body>
+  <h2>Formulario para crear un Post</h2>
+  <form action="http://localhost:3000/posts/create" method="POST" enctype="multipart/form-data">
+    
+    <label for="archivo">Archivo:</label><br>
+    <input type="file" id="archivo" name="archivo" required><br><br>
+
+    <label for="descripcion">Descripción:</label><br>
+    <textarea id="descripcion" name="descripcion" rows="4" cols="40" required></textarea><br><br>
+
+    <label for="categoria">Categoría:</label><br>
+    <select id="categoria" name="categoria" required>
+        <option value="folklore">Folklore</option>
+        <option value="gastronomia">gastronomia</option>
+        <option value="naturaleza">naturaleza</option>
+        <option value="turismo">turismo</option>
+    </select><br><br>
+
+    <label for="idUsuario">ID de Usuario:</label><br>
+    <input type="number" id="idUsuario" name="idUsuario" required><br><br>
+
+    <button type="submit">Crear Post</button>
+  </form>
+</body>
+</html>
+
 </body>
 </html>

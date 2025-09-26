@@ -3,6 +3,7 @@ import multer from "multer";
 import { uploadFile } from "./src/controllers/r2_upload.js";
 import routesUsers from "./src/routes/route_users.js";
 import routerActividades from "./src/routes/route_actividades.js";
+import routerPost from "./src/routes/route_post.js";
 import * as middleware from "./src/middleware/auth.js";
 import cors from "cors";
 
@@ -34,6 +35,7 @@ app.post("/upload", upload.single("file"), uploadFile);
 // Rutas de la API
 app.use("/users", routesUsers);
 app.use("/actividades", routerActividades);
+app.use("/posts", routerPost); 
 
 // Servir index.html desde src/templates
 app.get("/", (req, res) => {
