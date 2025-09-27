@@ -9,5 +9,6 @@ router.post("/register", module.registrarUsuario);
 router.post("/login", module.loginUsuario);
 router.get("/puntajeUsuario/:id", module.obtenerPuntajeUsuario);
 router.get("/puntajeTodos", module.puntajeTodos);
+router.get("/nombreUsuario/:id", module.obtenerNombreUsuario);
 
 export default router;
