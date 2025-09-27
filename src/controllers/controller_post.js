@@ -77,10 +77,19 @@ const obtenerPostsPorUsuario = async (req, res) => {
 const agregarReaccion = async (req, res) => {
     const { idPost, idUsuario } = req.body;
     try {
+
+        // validar si la reaccion ya existe
+        const checkQuery = `SELECT * FROM "reacciones" WHERE "idPost" = $1 AND "idUsuario" = $2`;
+        const checkResult = await pool.query(checkQuery, [idPost, idUsuario]);
+        if (checkResult.rows.length > 0) {
+            return res.status(400).json({ error: 'La reacción ya existe' });
+        }
+
         const query = `
             INSERT INTO "reacciones" ("idPost", "idUsuario", "fecha")
             VALUES ($1, $2, NOW()) RETURNING *`;
         const values = [idPost, idUsuario];
+
         const result = await pool.query(query, values);
         res.json(result.rows[0]);
     } catch (error) {
@@ -89,6 +98,24 @@ const agregarReaccion = async (req, res) => {
     }
 }
 
+const quitarReaccion = async (req, res) => {
+    const { idPost, idUsuario } = req.body;
+    try {
+        // validar si la reaccion existe
+        const checkQuery = `SELECT * FROM "reacciones" WHERE "idPost" = $1 AND "idUsuario" = $2`;
+        const checkResult = await pool.query(checkQuery, [idPost, idUsuario]);
+        if (checkResult.rows.length === 0) {
+            return res.status(400).json({ error: 'La reacción no existe' });
+        }
+        const query = `DELETE FROM "reacciones" WHERE "idPost" = $1 AND "idUsuario" = $2 RETURNING *`;
+        const values = [idPost, idUsuario];
+        const result = await pool.query(query, values);
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.error("❌ Error al quitar reaccion:", error);
+        res.status(500).json({ error: error.message });
+    }
+}
 
 const agregarComentario = async (req, res) => {
     const { idPost, idUsuario, texto } = req.body;
@@ -106,6 +133,11 @@ const agregarComentario = async (req, res) => {
 }
 
 
-
-
-export { crearPost, obtenerTodosPosts, obtenerPostsPorUsuario, agregarReaccion, agregarComentario };
+export {
+    crearPost,
+    obtenerTodosPosts,
+    obtenerPostsPorUsuario,
+    agregarReaccion,
+    quitarReaccion,
+    agregarComentario
+}

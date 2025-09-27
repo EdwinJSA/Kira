@@ -24,7 +24,11 @@ app.use(cors({
 }));
 
 app.use(express.json());
-const upload = multer({ storage: multer.memoryStorage() });
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 300 * 1024 * 1024 } // limite 300 MB
+});
+
 
 // Validar que el usuario esté autenticado
 app.use(middleware.validarUsuario);
