@@ -10,12 +10,14 @@ dotenv.config({ path: path.resolve(__dirname, "../.env") });
 const { Pool } = pg;
 
 const connectionString = process.env.DATABASE_URL;
-//console.log("DATABASE_URL:", connectionString);
 
 const pool = new Pool({
   connectionString,
   idleTimeoutMillis: 5000,
-  connectionTimeoutMillis: 10000
+  connectionTimeoutMillis: 10000,
+  ssl: {
+    rejectUnauthorized: true,
+  },
 });
 
 async function testConnection() {
