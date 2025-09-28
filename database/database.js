@@ -6,7 +6,7 @@ function crearBaseDatos() {
             "id" BIGSERIAL PRIMARY KEY,
             "nombre" VARCHAR(50) NOT NULL,
             "contrasena" VARCHAR(40) NOT NULL,
-            "correo" VARCHAR(60) NOT NULL,
+            "correo" VARCHAR(60) NOT NULL UNIQUE,
             "celular" VARCHAR(8) NOT NULL,
             "ciudad" VARCHAR(20) NOT NULL,
             "puntaje" BIGINT NOT NULL
@@ -83,7 +83,7 @@ function crearBaseDatos() {
             "idUsuario" BIGINT NOT NULL,
             "descripcion" TEXT NOT NULL,
             "link_archivo" TEXT NOT NULL,
-            "tipo" VARCHAR(5) NOT NULL,
+            "tipo" TEXT NOT NULL,
             "fecha_creación" DATE NOT NULL
         );
 
@@ -137,12 +137,32 @@ function crearBaseDatos() {
     });
 }
 
-// crearBaseDatos();
+//crearBaseDatos();
 
-function cambiosDataBase() {
+// function cambiosDataBase() {
+//     // CONSULTA PARA ELIMINAR UN USUARIO SUN IMPORTAR QUE EN LA TABLA COPLAPORUSUARIO TENGA REGISTROS
+//     pool.query(`
+//         DELETE FROM "usuarios" 
+//         WHERE "id" = 1 
+//         CASCADE;
+
+//     `)
+//     .then(() => {
+//         console.log('Cambios en la base de datos aplicados');
+//         process.exit(0);
+//     })
+//     .catch((error) => {
+//         console.error('Error al aplicar cambios en la base de datos:', error);
+//         process.exit(1);
+//     });
+// }
+
+
+// alterar columna tipo en la tabla post de VARCHAR(5) a TEXT
+const cambiosDataBase = () => {
     pool.query(`
-        ALTER TABLE "usuarios"
-        ADD CONSTRAINT correo_unico UNIQUE("correo");
+        ALTER TABLE "post"
+        ALTER COLUMN "tipo" TYPE TEXT;
     `)
     .then(() => {
         console.log('Cambios en la base de datos aplicados');
@@ -153,7 +173,5 @@ function cambiosDataBase() {
         process.exit(1);
     });
 }
-
-
 
 cambiosDataBase();

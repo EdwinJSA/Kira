@@ -58,6 +58,56 @@ const obtenerTodosPosts = async (_req, res) => {
         res.status(500).json({ error: error.message });
     }
 }
+const obtenerPostPorId = async (req, res) => {
+    try {
+        // id llega desde la URL: /obtenerPost/:id
+        const { id } = req.params;
+
+        console.log("🟢 ID recibido:", id); // debug
+
+        // Validar que sea un número
+        if (!id || isNaN(id)) {
+            return res.status(400).json({ error: "ID inválido" });
+        }
+
+        const query = `
+            SELECT p.*, u.nombre AS usuario,
+            (SELECT COUNT(*) 
+             FROM reacciones r 
+             WHERE r."idPost" = p."id") AS reacciones,
+            (SELECT COALESCE(
+                        json_agg(
+                            json_build_object(
+                                'id', c.id,
+                                'idUsuario', c."idUsuario",
+                                'texto', c.texto,
+                                'fecha_creacion', c.fecha_creacion,
+                                'autor', u2.nombre
+                            )
+                        ), '[]'
+                    )
+             FROM comentarios c
+             JOIN usuarios u2 ON c."idUsuario" = u2.id
+             WHERE c."idPost" = p."id") AS comentarios
+            FROM post p
+            LEFT JOIN usuarios u ON p."idUsuario" = u.id
+            WHERE p."id" = $1
+            ORDER BY p."fecha_creación" DESC
+            LIMIT 1
+        `;
+
+        const result = await pool.query(query, [Number(id)]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: "Post no encontrado" });
+        }
+
+        res.json(result.rows[0]); // devuelve solo 1 post
+    } catch (error) {
+        console.error("❌ Error al obtener el post:", error);
+        res.status(500).json({ error: error.message });
+    }
+};
 
 
 const obtenerPostsPorUsuario = async (req, res) => {
@@ -127,10 +177,73 @@ const agregarComentario = async (req, res) => {
         const result = await pool.query(query, values);
         res.json(result.rows[0]);
     } catch (error) {
-        console.error("❌ Error al agregar comentario:", error);
+        console.error("❌ Error al agregar comentario:", error);    
         res.status(500).json({ error: error.message });
     }
 }
+
+
+const quitarComentario = async (req, res) => {
+    const { idComentario, idUsuario } = req.body;
+    try {
+        // validar si el comentario existe y pertenece al usuario
+        const checkQuery = `SELECT * FROM comentarios WHERE id = $1 AND "idUsuario" = $2`;
+        const checkResult = await pool.query(checkQuery, [idComentario, idUsuario]);
+        if (checkResult.rows.length === 0) {
+            return res.status(400).json({ error: 'El comentario no existe o no pertenece al usuario' });
+        }   
+        const query = `DELETE FROM comentarios WHERE id = $1`;
+        const values = [idComentario];
+        const result = await pool.query(query, values);
+        res.json({message: 'Comentario eliminado', success: true});
+    }
+    catch (error) {
+        console.error("❌ Error al quitar comentario:", error);
+        res.status(500).json({ error: error.message });
+    }
+}
+
+const eliminarPost = async (req, res) => {
+    const { idPost, idUsuario } = req.body;
+    try {
+        // validar si el post existe y pertenece al usuario
+        const checkQuery = `SELECT * FROM post WHERE id = $1 AND "idUsuario" = $2`;
+        const checkResult = await pool.query(checkQuery, [idPost, idUsuario]);
+        if (checkResult.rows.length === 0) {
+            return res.status(400).json({ error: 'El post no existe o no pertenece al usuario' });
+        }
+
+        // eliminar dependencias
+        await pool.query(`DELETE FROM reacciones WHERE "idPost" = $1`, [idPost]);
+        await pool.query(`DELETE FROM comentarios WHERE "idPost" = $1`, [idPost]);
+
+        // eliminar el post
+        const query = `DELETE FROM post WHERE id = $1`;
+        const result = await pool.query(query, [idPost]);
+
+        res.json({ message: 'Post eliminado', success: true });
+    } catch (error) {
+        console.error("❌ Error al eliminar post:", error);
+        res.status(500).json({ error: error.message });
+    }
+}
+
+
+const verificarLikeUsuario = async (req, res) => {
+    const { idPost, idUsuario } = req.query;
+    try {
+        const query = `SELECT 1 FROM "reacciones" WHERE "idPost" = $1 AND "idUsuario" = $2 LIMIT 1`;
+        const values = [idPost, idUsuario];
+        const result = await pool.query(query, values);
+
+        // devolver json al cliente
+        res.json({ liked: result.rows.length > 0 });
+    } catch (error) {
+        console.error("❌ Error al verificar like del usuario:", error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
 
 
 export {
@@ -139,5 +252,9 @@ export {
     obtenerPostsPorUsuario,
     agregarReaccion,
     quitarReaccion,
-    agregarComentario
+    agregarComentario,
+    quitarComentario,
+    eliminarPost,
+    obtenerPostPorId,
+    verificarLikeUsuario
 }

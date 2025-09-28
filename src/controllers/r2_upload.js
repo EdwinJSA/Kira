@@ -1,12 +1,11 @@
 import { s3 } from "../controllers/r2_conexion.js"; 
 import sharp from "sharp";
 
-// 🔹 Función para optimizar la imagen y convertir a WebP
 export const optimizeImage = async (buffer) => {
   try {
     const optimizedBuffer = await sharp(buffer)
-      .resize({ width: 1200 })        // opcional: redimensionar ancho máx
-      .webp({ quality: 75 })          // convertir a WebP con calidad 75%
+      .resize({ width: 1200 })        
+      .webp({ quality: 75 })         
       .toBuffer();
 
     return optimizedBuffer;

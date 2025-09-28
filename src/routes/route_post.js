@@ -15,5 +15,10 @@ router.get("/todos", module.obtenerTodosPosts);
 router.get("/usuario/:idUsuario", module.obtenerPostsPorUsuario);
 router.post("/reaccion", module.agregarReaccion);
 router.post("/quitarReaccion", module.quitarReaccion);  
+router.post("/comentario", module.agregarComentario);
+router.delete("/quitarComentario", module.quitarComentario);
+router.delete("/eliminarPost", module.eliminarPost);
+router.get("/obtenerPost/:id", module.obtenerPostPorId);
+router.get("/verificarLike", module.verificarLikeUsuario);
 
 export default router;

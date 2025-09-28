@@ -287,6 +287,99 @@ async function coplasRespuestas() {
 }
 
 // Función principal para insertar todo en orden
+
+async function cuestionarioGastronomia() {
+    const queryCuestionario = `
+        INSERT INTO "cuestionario" (titulo, descripcion, tipo, puntaje)
+        VALUES
+        ('Gastronomía Nicaragüense', 'Cuestionario sobre comidas, bebidas y postres tradicionales de Nicaragua.', 'Gastronomía', 300);
+    `;
+    await pool.query(queryCuestionario);
+
+    const queryPreguntas = `
+        INSERT INTO "cuest_preguntas" ("idCuestionario", "pregunta")
+        VALUES
+        (4, '¿Cuál es considerado el plato nacional de Nicaragua?'),
+        (4, '¿Qué bebida típica se prepara con maíz tostado y cacao, símbolo de identidad nicaragüense?'),
+        (4, '¿Cuál es un platillo tradicional a base de yuca, carne y plátano, cocido al vapor?'),
+        (4, '¿Qué sopa típica se prepara con pescado seco, leche de coco y verduras?'),
+        (4, '¿Cuál es el desayuno típico compuesto de arroz y frijoles mezclados?'),
+        (4, '¿Qué postre tradicional se elabora con maíz, leche, canela y azúcar?'),
+        (4, '¿Qué ciudad es famosa por su tradicional “nacatamal”?'),
+        (4, '¿Cómo se llama la bebida fermentada de maíz asociada a las fiestas patronales?'),
+        (4, '¿Qué plato típico incluye carne en trozos, yuca, plátano y repollo, servido envuelto en hojas?'),
+        (4, '¿Qué dulce típico se prepara con leche, azúcar y canela, muy consumido en Semana Santa?');
+    `;
+    await pool.query(queryPreguntas);
+
+    const queryRespuestas = `
+        INSERT INTO "cuest_respuesta" ("idPregunta", respuesta, es_correcta)
+        VALUES
+        -- Pregunta 31
+        (31, 'Gallo Pinto', false),
+        (31, 'Vaho', false),
+        (31, 'Nacatamal', false),
+        (31, 'Gallo Pinto y Nacatamal', false),
+        (31, 'Gallo Pinto', true),
+
+        -- Pregunta 32
+        (32, 'Pinolillo', true),
+        (32, 'Chicha de maíz', false),
+        (32, 'Tiste', false),
+        (32, 'Pozol', false),
+
+        -- Pregunta 33
+        (33, 'Nacatamal', false),
+        (33, 'Vaho', true),
+        (33, 'Indio viejo', false),
+        (33, 'Sopa de queso', false),
+
+        -- Pregunta 34
+        (34, 'Sopa de queso', false),
+        (34, 'Sopa marinera', false),
+        (34, 'Sopa de pescado seco', true),
+        (34, 'Sopa de res', false),
+
+        -- Pregunta 35
+        (35, 'Nacatamal', false),
+        (35, 'Gallo Pinto', true),
+        (35, 'Vaho', false),
+        (35, 'Indio viejo', false),
+
+        -- Pregunta 36
+        (36, 'Cajeta de coco', false),
+        (36, 'Atolillo', true),
+        (36, 'Buñuelos', false),
+        (36, 'Pio V', false),
+
+        -- Pregunta 37
+        (37, 'Estelí', false),
+        (37, 'Masaya', true),
+        (37, 'León', false),
+        (37, 'Matagalpa', false),
+
+        -- Pregunta 38
+        (38, 'Chicha bruja', true),
+        (38, 'Tiste', false),
+        (38, 'Pinol', false),
+        (38, 'Pozol', false),
+
+        -- Pregunta 39
+        (39, 'Indio viejo', false),
+        (39, 'Vaho', true),
+        (39, 'Nacatamal', false),
+        (39, 'Sopa marinera', false),
+
+        -- Pregunta 40
+        (40, 'Cajeta de coco', false),
+        (40, 'Atolillo', false),
+        (40, 'Leche burra', true),
+        (40, 'Turrón', false);
+    `;
+    await pool.query(queryRespuestas);
+}
+
+
 async function insertarTodo() {
     try {
         await insertarUsuarios();
@@ -297,6 +390,7 @@ async function insertarTodo() {
         await insertarCoplas();
         await coplasPreguntas();
         await coplasRespuestas();
+        await cuestionarioGastronomia();
         console.log('Datos insertados correctamente');
     } catch (error) {
         console.error('Error al insertar datos:', error);
