@@ -93,6 +93,43 @@ const obtenerNombreUsuario = async (req, res) => {
   }
 };
 
+const cambiarContrasena = async (req, res) => {
+  const { id, contrasenaActual, nuevaContrasena } = req.body;
+  try {
+    // Verificar la contrasena actual
+    const checkQuery = `SELECT contrasena FROM usuarios WHERE id = $1`;
+    const checkResult = await pool.query(checkQuery, [id]);
+    if (checkResult.rows.length === 0) {
+      return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+    const contrasenaEncontrada = checkResult.rows[0].contrasena;
+    if (contrasenaEncontrada !== contrasenaActual) {
+      return res.status(400).json({ error: "Contrasena actual incorrecta" });
+    }
+
+    // Actualizar la contrasena
+    const updateQuery = `UPDATE usuarios SET contrasena = $1 WHERE id = $2 RETURNING *`;
+    const values = [nuevaContrasena, id];
+    const result = await pool.query(updateQuery, values);
+    res.json({ success: true, Message: "Contrasena cambiada con exito" });
+  } catch (error) {
+    console.error("❌ Error al cambiar contrasena:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const cambiarNombreUsuario = async (req, res) => {
+  const { id, nuevoNombre } = req.body;
+  try {
+    const updateQuery = `UPDATE usuarios SET nombre = $1 WHERE id = $2 RETURNING *`;
+    const values = [nuevoNombre, id];
+    const result = await pool.query(updateQuery, values);
+    res.json({ success: true, Message: "Nombre de usuario cambiado con exito" });
+  } catch (error) {
+    console.error("❌ Error al cambiar nombre de usuario:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
 
 
-export { registrarUsuario, loginUsuario, obtenerPuntajeUsuario, puntajeTodos, obtenerNombreUsuario };
+export { registrarUsuario, loginUsuario, obtenerPuntajeUsuario, puntajeTodos, obtenerNombreUsuario, cambiarContrasena, cambiarNombreUsuario };
