@@ -36,46 +36,27 @@ const crearPost = async (req, res) => {
 };
 
 
-
-
 const obtenerTodosPosts = async (_req, res) => {
-    // este recupera todos los posts con el nombre de su autor, todos los comentarios de cada post y cantidad de reacciones de cada uno
     try {
         const query = `
-            SELECT p.*, u.nombre AS usuario,
-            (SELECT COUNT(*) FROM reacciones r WHERE r."idPost" = p.id) AS reacciones,
-            (SELECT json_agg(json_build_object('id', c.id, 'idUsuario', c."idUsuario", 'texto', c.texto, 'fecha_creacion', c.fecha_creacion, 'autor', u2.nombre))
-             FROM comentarios c
-             JOIN usuarios u2 ON c."idUsuario" = u2.id
-             WHERE c."idPost" = p.id) AS comentarios
-            FROM post p
-            JOIN usuarios u ON p."idUsuario" = u.id
-            ORDER BY p."fecha_creación" DESC`;
-        const result = await pool.query(query);
-        res.json(result.rows);
-    } catch (error) {
-        console.error("❌ Error al obtener todos los posts:", error);
-        res.status(500).json({ error: error.message });
-    }
-}
-const obtenerPostPorId = async (req, res) => {
-    try {
-        // id llega desde la URL: /obtenerPost/:id
-        const { id } = req.params;
-
-        console.log("🟢 ID recibido:", id); // debug
-
-        // Validar que sea un número
-        if (!id || isNaN(id)) {
-            return res.status(400).json({ error: "ID inválido" });
-        }
-
-        const query = `
-            SELECT p.*, u.nombre AS usuario,
-            (SELECT COUNT(*) 
-             FROM reacciones r 
-             WHERE r."idPost" = p."id") AS reacciones,
-            (SELECT COALESCE(
+            SELECT 
+                p.*, 
+                u.nombre AS usuario,
+                -- cantidad de reacciones
+                (SELECT COUNT(*) 
+                 FROM reacciones r 
+                 WHERE r."idPost" = p.id
+                ) AS reacciones,
+                -- nombres de usuarios que reaccionaron
+                (SELECT COALESCE(
+                        json_agg(u2.nombre), '[]'::json
+                    )
+                 FROM reacciones r
+                 JOIN usuarios u2 ON r."idUsuario" = u2.id
+                 WHERE r."idPost" = p.id
+                ) AS usuarios_que_reaccionaron,
+                -- comentarios con autor, texto y fecha, ordenados por fecha descendente
+                (SELECT COALESCE(
                         json_agg(
                             json_build_object(
                                 'id', c.id,
@@ -84,15 +65,74 @@ const obtenerPostPorId = async (req, res) => {
                                 'fecha_creacion', c.fecha_creacion,
                                 'autor', u2.nombre
                             )
-                        ), '[]'
+                            ORDER BY c.fecha_creacion DESC
+                        ), '[]'::json
                     )
-             FROM comentarios c
-             JOIN usuarios u2 ON c."idUsuario" = u2.id
-             WHERE c."idPost" = p."id") AS comentarios
+                 FROM comentarios c
+                 JOIN usuarios u2 ON c."idUsuario" = u2.id
+                 WHERE c."idPost" = p.id
+                ) AS comentarios
+            FROM post p
+            JOIN usuarios u ON p."idUsuario" = u.id
+            ORDER BY p."fecha_creación"  DESC
+        `;
+        
+        const result = await pool.query(query);
+        res.json(result.rows);
+    } catch (error) {
+        console.error("❌ Error al obtener todos los posts:", error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
+const obtenerPostPorId = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (!id || isNaN(id)) {
+            return res.status(400).json({ error: "ID inválido" });
+        }
+
+        const query = `
+            SELECT 
+                p.*, 
+                u.nombre AS usuario,
+                -- cantidad de reacciones
+                (SELECT COUNT(*) 
+                 FROM reacciones r 
+                 WHERE r."idPost" = p.id
+                ) AS cantidad_reacciones,
+                -- lista de usuarios que reaccionaron
+                (SELECT COALESCE(
+                        json_agg(json_build_object(
+                            'idUsuario', u2.id,
+                            'nombre', u2.nombre
+                        )), '[]'::json
+                    )
+                 FROM reacciones r
+                 JOIN usuarios u2 ON r."idUsuario" = u2.id
+                 WHERE r."idPost" = p.id
+                ) AS usuarios_que_reaccionaron,
+                -- comentarios con autor, texto y fecha, ordenados por fecha descendente
+                (SELECT COALESCE(
+                        json_agg(
+                            json_build_object(
+                                'id', c.id,
+                                'idUsuario', c."idUsuario",
+                                'texto', c.texto,
+                                'fecha_creacion', c.fecha_creacion,
+                                'autor', u2.nombre
+                            )
+                            ORDER BY c.fecha_creacion DESC
+                        ), '[]'::json
+                    )
+                 FROM comentarios c
+                 JOIN usuarios u2 ON c."idUsuario" = u2.id
+                 WHERE c."idPost" = p.id
+                ) AS comentarios
             FROM post p
             LEFT JOIN usuarios u ON p."idUsuario" = u.id
-            WHERE p."id" = $1
-            ORDER BY p."fecha_creación" DESC
+            WHERE p.id = $1
             LIMIT 1
         `;
 
@@ -102,12 +142,14 @@ const obtenerPostPorId = async (req, res) => {
             return res.status(404).json({ error: "Post no encontrado" });
         }
 
-        res.json(result.rows[0]); // devuelve solo 1 post
+        res.json(result.rows[0]);
     } catch (error) {
         console.error("❌ Error al obtener el post:", error);
         res.status(500).json({ error: error.message });
     }
 };
+
+
 
 
 const obtenerPostsPorUsuario = async (req, res) => {

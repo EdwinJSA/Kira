@@ -1,92 +1,104 @@
 # 🇳🇮 Proyecto Kira
 
-**Proyecto Kira** es una aplicación web dedicada a la **cultura nicaragüense**, cuyo propósito es rescatar y difundir las costumbres y tradiciones que nos representan.  
+**Proyecto Kira** es una aplicación web y móvil dedicada a la **cultura nicaragüense**, cuyo propósito es **rescatar y difundir nuestras costumbres y tradiciones**.
 
-La plataforma contará con una modalidad **interactiva** en la que, a medida que los usuarios participen y completen actividades, acumularán puntos que reflejarán su progreso y aprendizaje.  
+La plataforma integra una modalidad **interactiva**, donde los usuarios participan en actividades, acumulan puntos y refuerzan su aprendizaje mientras descubren la riqueza cultural de Nicaragua.
 
-Además, incluirá un sistema de **aula digital** que permitirá a los profesores asignar módulos como tareas, fomentando así el uso educativo de la plataforma.
-
---- 
+---
 
 ## ✨ Características principales
 
-- Difusión de la cultura nicaragüense.  
-- Modalidad interactiva con sistema de puntos.  
-- Plataforma educativa con módulos asignados por profesores.  
-- Experiencia gamificada para estudiantes y usuarios.  
+- 📚 Difusión de la cultura nicaragüense.
+- 🏆 Modalidad interactiva con sistema de puntos y progreso.
+- 🎓 Plataforma educativa con módulos asignados por profesores.
+- 🗺️ Mapas interactivos de memorias populares.
+- 🌐 Red social integrada para compartir contenido cultural.
 
 ---
 
 ## 🛠️ Tecnologías utilizadas
 
-**Frontend**  
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" width="40"/> HTML
-<img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/tailwindcss.svg" width="40" height="40" /> TAILWIND
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" width="40"/>  JAVASCRIPT
+**Frontend**
+- ⚛️ React Native
+- 🎨 TailwindCSS
 
-**Backend**  
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" width="40"/> NODE JS
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" width="40"/> EXPRESS JS
-
-**Base de datos**  
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" width="40"/> POSGRESQL
+**Backend**
+- 🟢 Node.js
+- 🐘 PostgreSQL
+- ☁️ Cloudflare R2 (almacenamiento en la nube)
+- ▲ Vercel (hosting del backend)
+- 🚀 Render (hosting de la base de datos)
 
 ---
 
 ## 📋 Requisitos previos
 
-Antes de comenzar, asegúrate de tener instalado:  
+Antes de comenzar, asegúrate de tener instalado:
 
-- [Node.js](https://nodejs.org/) (v14 o superior)  
-- [npm](https://www.npmjs.com/) (incluido con Node.js)  
-- [PostgreSQL](https://www.postgresql.org/)  
+- [Node.js](https://nodejs.org/) (v14 o superior)
+- [npm](https://www.npmjs.com/) (incluido con Node.js)
+- [Git](https://git-scm.com/downloads)
+- [Expo Go](https://play.google.com/store/apps/details?id=host.exp.exponent) (aplicación móvil para probar el proyecto)
 
 ---
 
-## ⚙️ Instalación
+## ⚙️ Instalación y ejecución del Frontend
 
-1. Clona este repositorio:  
+1. Abre **Visual Studio Code**.
+2. Clona este repositorio:
+
    ```bash
-   git clone https://github.com/tu-usuario/proyecto-kira.git
-   cd proyecto-kira
+   git clone https://github.com/ItsAlexMI/kira.git
    ```
+3. Instala las dependencias:
 
-2. Instala las independencias:
-    ```bash
-    npm install
-    ```
+   ```bash
+   npm install
+   ```
+4. Inicia la aplicación:
 
-3. Configura la base de datos en PostgreSQL y agrega tus credenciales en un archivo .env:
-    ```bash
-    DB_HOST=localhost
-    DB_USER=tu_usuario
-    DB_PASSWORD=tu_password
-    DB_NAME=kira_db
-    DB_PORT=5432
-    ```
+   ```bash
+   npx expo start
+   ```
+5. Abre la app **Expo Go** en tu dispositivo móvil y escanea el código QR mostrado en la terminal.
+6. ¡Listo! Disfruta de una aplicación 100% Nica 🎉
 
-4. Para ejecutar en modo desarrollo:
-    ```
-    npm run dev
-    ```
+> **Nota:** No es necesario instalar el backend de forma local, ya que está desplegado en la nube y la app puede conectarse directamente.
 
-    **La aplicacion correra en 👉 http://localhost:3000**
+---
 
-## 📂 Estructura del proyecto
-```bash 
-    proyecto-kira/ 
-    │ 
-    ├── public/
-    ├── src/ 
-    │ ├── routes/
-    │ ├── controllers/
-    │ ├── models/
-    │ └── app.js
-    │ 
-    ├── package.json
-    ├── .env 
-    └── README.md
-```
+## 🛣️ Roadmap / Futuras mejoras
 
+- Agregar Verificación de correos
+- Notificaciones Push
+- Apartado de sugerencias de lugares en el mapa interactivo
+- Mejor servicio de videos (Pasar de R2 a Stream de Cloudflare)
 
+---
 
+## 📸 Dale un vistazo al diseño
+
+- [Kira-Figma](https://www.figma.com/design/LgYTutPZwIVBDBO3YVekNj/Kira-App-Design?node-id=0-1&t=ZWqGT68LYe6vdy7s-1)
+
+---
+
+## 🎥 Video Demo
+
+- Enlace al demo de la aplicación (opcional).
+
+---
+
+## 👥 Equipo de Desarrollo
+
+Desarrolladores
+- [Edwin José Silva Alvarado](https://github.com/EdwinJSA)
+- [Alex Josué Martinez Irias](https://github.com/ItsAlexMI)
+
+Comunicadora
+- [Priscila Massiel Castillo Silva]()
+
+Diseñadora
+- [Ashley Anahí Solorzano Aguilar]()
+
+Marketing
+- [Lesly Raquel Espinoza Rivera]()
