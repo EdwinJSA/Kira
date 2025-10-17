@@ -1,6 +1,6 @@
 import pool from "../../database/supabase.js";
 import bcrypt from 'bcrypt';
-import math from 'mathjs';
+import * as math from 'mathjs';
 
 const registrarUsuario = async (req, res) => {
   const { nombre, contrasena, correo, celular, ciudad } = req.body;
@@ -13,7 +13,7 @@ const registrarUsuario = async (req, res) => {
     }
 
 
-    const saltRounds = math.randomInt(10, 15);
+    const saltRounds = math.randomInt(10, 15); 
     const contraEcripta = await bcrypt.hash(contrasena, saltRounds)
 
     const query = `
