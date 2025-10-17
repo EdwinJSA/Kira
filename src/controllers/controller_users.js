@@ -1,19 +1,25 @@
 import pool from "../../database/supabase.js";
+import bcrypt from 'bcrypt';
 
 const registrarUsuario = async (req, res) => {
   const { nombre, contrasena, correo, celular, ciudad } = req.body;
   try {
-    // validar si el correo ya existe
+    
     const checkQuery = `SELECT * FROM usuarios WHERE correo = $1`;
     const checkResult = await pool.query(checkQuery, [correo]);
     if (checkResult.rows.length > 0) {
       return res.status(400).json({ error: 'El correo ya está registrado' });
     }
 
+
+    const saltRounds = math.randomInt(10, 15);
+    const contraEcripta = await bcrypt.hash(contrasena, saltRounds)
+
     const query = `
-      INSERT INTO usuarios (nombre, contrasena, correo, celular, ciudad)
-      VALUES ($1, $2, $3, $4, $5) RETURNING nombre, id`;
-    const values = [nombre, contrasena, correo, celular, ciudad];
+    INSERT INTO usuarios (nombre, contrasena, correo, celular, ciudad, hash)
+    VALUES ($1, $2, $3, $4, $5, $6) RETURNING nombre, id`;
+
+    const values = [nombre, contraEcripta, correo, celular, ciudad, saltRounds];
     const result = await pool.query(query, values);
     res.json(result.rows[0]);
     
@@ -22,21 +28,62 @@ const registrarUsuario = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
-
 const loginUsuario = async (req, res) => {
   const { correo, contrasena } = req.body;
   try {
-    const query = `
-      SELECT * FROM usuarios WHERE correo = $1 AND contrasena = $2`;
-    const values = [correo, contrasena];
+    const query = `SELECT id, nombre, contrasena FROM usuarios WHERE correo = $1`;
+    const values = [correo];
+
     const result = await pool.query(query, values);
-    res.json({ success: true, userId: result.rows[0]?.id || null });
+
+    if (result.rows.length === 0) {
+      return res.status(401).json({ error: "Correo o contraseña incorrectos" });
+    }
+
+    const user = result.rows[0];
+
+    const contrasenaValida = await bcrypt.compare(contrasena, user.contrasena);
+
+    if (!contrasenaValida) {
+      return res.status(401).json({ error: "Correo o contraseña incorrectos" });
+    }
+
+    res.json({
+      success: true,
+      userId: user.id,
+      nombre: user.nombre
+    });
   } catch (error) {
     console.error("❌ Error al iniciar sesión:", error);
     res.status(500).json({ error: error.message });
   }
 };
+
+
+
+
+// const loginUsuario = async (req, res) => {
+//   const { correo, contrasena } = req.body;
+//   try {
+//     const query = `
+//       SELECT * FROM contrasena, hash WHERE correo = $1`;
+//     const values = [correo];
+
+//     //validar que la contraseña hasheada coincida con la de la base de datos
+//     const result = await pool.query(query, values);
+//     hashRounds = result.rows[0]?.hash;
+//     const contrasenaValida = await bcrypt.compare(contrasena, result.rows[0]?.contrasena);
+
+//     if (result.rows.length === 0 || !contrasenaValida) {
+//       return res.status(401).json({ error: "Correo o contrasena incorrectos" });
+//     }
+
+//     res.json({ success: true, userId: result.rows[0]?.id || null });
+//   } catch (error) {
+//     console.error("❌ Error al iniciar sesión:", error);
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 
 
 const obtenerPuntajeUsuario = async (req, res) => {

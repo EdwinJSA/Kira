@@ -399,4 +399,18 @@ async function insertarTodo() {
     }
 }
 
-insertarTodo();
+// insertar un nuevo personaje
+async function insertarPersonaje() {
+    const nombre = 'Emmanuel Mongalo y Rubio';
+    const descripcion = 'Maestro de profesión, héroe de convicción, mi valentía dio esperanza a la nación.En Rivas mi nombre quedó grabado,¿qué joven nicaragüense fue recordado?';
+    const imagen = 'https://pub-dc88437b1eb54374b54af12eb03423a9.r2.dev/enmanuel.png';
+    const puntaje = 350;
+    const query = `
+        INSERT INTO "personajes" (nombre, descripcion, imagen, puntaje)
+        VALUES ($1, $2, $3, $4) RETURNING *`;
+    const values = [nombre, descripcion, imagen, puntaje];
+    const result = await pool.query(query, values);
+    return result.rows[0];
+};
+
+insertarPersonaje();

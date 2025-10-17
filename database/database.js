@@ -159,10 +159,90 @@ function crearBaseDatos() {
 
 
 // alterar columna tipo en la tabla post de VARCHAR(5) a TEXT
+// const cambiosDataBase = () => {
+//     pool.query(`
+//         ALTER TABLE "post"
+//         ALTER COLUMN "tipo" TYPE TEXT;
+//     `)
+//     .then(() => {
+//         console.log('Cambios en la base de datos aplicados');
+//         process.exit(0);
+//     })
+//     .catch((error) => {
+//         console.error('Error al aplicar cambios en la base de datos:', error);
+//         process.exit(1);
+//     });
+// }
+
+
+
+//alterar columna contrasena en la tabla usuarios de VARCHAR(20) a text
+// const cambiosDataBase = () => {
+//     pool.query(`
+//         ALTER TABLE "usuarios"
+//         ALTER COLUMN "contrasena" TYPE text;
+//     `)
+//     .then(() => {
+//         console.log('Cambios en la base de datos aplicados');
+//         process.exit(0);
+//     })
+//     .catch((error) => {
+//         console.error('Error al aplicar cambios en la base de datos:', error);
+//         process.exit(1);
+//     });
+// }
+
+
+// const eliminarUsuarios = () => {
+//   pool.query(`
+//     BEGIN;
+
+//     DELETE FROM "comentarios"
+//     WHERE "idPost" IN (
+//       SELECT "id" FROM "post" WHERE "idUsuario" IN (31, 32)
+//     );
+
+//     DELETE FROM "reacciones"
+//     WHERE "idPost" IN (
+//       SELECT "id" FROM "post" WHERE "idUsuario" IN (31, 32)
+//     );
+
+//     DELETE FROM "compartidos"
+//     WHERE "idPost" IN (
+//       SELECT "id" FROM "post" WHERE "idUsuario" IN (31, 32)
+//     );
+
+//     DELETE FROM "personajePorUsuario" WHERE "idUsuario" IN (31, 32);
+//     DELETE FROM "cuestionarioPorUsuario" WHERE "idUsuario" IN (31, 32);
+//     DELETE FROM "coplaPorUsuario" WHERE "idUsuario" IN (31, 32);
+//     DELETE FROM "reacciones" WHERE "idUsuario" IN (31, 32);
+//     DELETE FROM "comentarios" WHERE "idUsuario" IN (31, 32);
+//     DELETE FROM "compartidos" WHERE "idUsuario" IN (31, 32);
+//     DELETE FROM "post" WHERE "idUsuario" IN (31, 32);
+
+//     DELETE FROM "usuarios" WHERE "id" IN (31, 32);
+
+//     COMMIT;
+//   `)
+//   .then(() => {
+//     console.log('Usuarios 31 y 32 eliminados correctamente junto con sus dependencias');
+//     process.exit(0);
+//   })
+//   .catch((error) => {
+//     console.error('Error al eliminar usuarios:', error);
+//     pool.query('ROLLBACK');
+//     process.exit(1);
+//   });
+// };
+// eliminarUsuarios();
+
+
+//alterar la tabla usuarios para agregar una columna hash tipo entero donde se guarda el numero del bycript
+// con valor default 10
 const cambiosDataBase = () => {
     pool.query(`
-        ALTER TABLE "post"
-        ALTER COLUMN "tipo" TYPE TEXT;
+        ALTER TABLE "usuarios"
+        ADD COLUMN "hash" INTEGER DEFAULT 10;
     `)
     .then(() => {
         console.log('Cambios en la base de datos aplicados');
