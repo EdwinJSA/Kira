@@ -1,5 +1,6 @@
 import pool from "../../database/supabase.js";
 import bcrypt from 'bcrypt';
+import math from 'mathjs';
 
 const registrarUsuario = async (req, res) => {
   const { nombre, contrasena, correo, celular, ciudad } = req.body;
